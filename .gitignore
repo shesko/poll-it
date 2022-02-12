@@ -1,0 +1,11 @@
+# NPM
+node_modules
+
+# IDE
+.idea
+
+# TS
+lib
+
+# Folder that can be used to experiment with library
+playground
