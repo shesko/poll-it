@@ -1,7 +1,7 @@
-# Poll It
+# Poller Bear
 
 A simple poller that can be used in both JavaScript and TypeScript projects. 
-With "Poll It" you can continuously perform an operation indefinitely or until a condition is met.
+With "Poller Bear" you can continuously perform an operation indefinitely or until a condition is met.
 
 ## Usage
 

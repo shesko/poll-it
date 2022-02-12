@@ -1,5 +1,5 @@
 {
-  "name": "poll-it",
+  "name": "poller-bear",
   "version": "1.0.0",
   "description": "A polling library for JavaScript and TypeScript",
   "main": "lib/index.js",
@@ -9,23 +9,23 @@
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "test": "jest --config jestconfig.json",
-    "prepare" : "npm run build",
-    "prepublishOnly" : "npm test && npm run lint",
-    "preversion" : "npm run lint",
-    "version" : "npm run format && git add -A src",
-    "postversion" : "git push && git push --tags"
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shesko/poll-it.git"
+    "url": "git+https://github.com/shesko/poller-bear.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/shesko/poll-it/issues"
+    "url": "https://github.com/shesko/poller-bear/issues"
   },
-  "homepage": "https://github.com/shesko/poll-it#readme",
+  "homepage": "https://github.com/shesko/poller-bear#readme",
   "devDependencies": {
     "@types/es6-promise": "^3.3.0",
     "@types/jest": "^27.4.0",
@@ -38,5 +38,7 @@
     "typescript": "^4.5.5",
     "uuid": "^8.3.2"
   },
-  "files": ["lib/**/*"]
+  "files": [
+    "lib/**/*"
+  ]
 }
