@@ -27,5 +27,5 @@ export default class Poller<T> {
 
 export interface PollerConfig<T> {
     fn: () => T,
-    continuePolling: (result?: T) => boolean
+    continuePolling?: (result?: T) => boolean
 }

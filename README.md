@@ -1,5 +1,7 @@
 # Poller Bear
 
+:warning: THIS LIBRARY STILL HAS LIMITED FEATURES AND IS NOT READY FOR PRODUCTION :warning:
+
 A simple poller that can be used in both JavaScript and TypeScript projects. 
 With "Poller Bear" you can continuously perform an operation indefinitely or until a condition is met.
 
@@ -13,7 +15,7 @@ the provided function.
 
 ```typescript
 const config = { fn: () => console.log('Polling...') }
-const poller = new Poller(config);
+const poller = new Poller<void>(config);
 poller.poll().resolve();
 ```
 
@@ -23,11 +25,11 @@ poll until an api responds with a certain status. This can be achieved by provid
 to the `continuePolling` field of our Poller `config` object
 
 ```typescript
-const fn = () => ApiService.get();
-const continuePolling = (apiResponse) => apiResponse.status === 'SUCCESS';
+const fn = (): ApiResponse => ApiService.get();
+const continuePolling = (apiResponse: ApiResponse) => apiResponse.status === 'SUCCESS';
 
 const config = { fn, continuePolling }
-const poller = new Poller(config);
+const poller = new Poller<ApiResponse>(config);
 
 const response = await poller.poll();
 ```
