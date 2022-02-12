@@ -12,12 +12,16 @@ export default class Poller<T> {
 
     async poll(): Promise<T> {
         const execute = async (resolve: PromiseResolve<T>, reject: PromiseReject) => {
-            const result = this.fn();
+            try {
+                const result = this.fn();
 
-            if (this.continuePolling(result)) {
-                setTimeout(() => execute(resolve, reject));
-            } else {
-                resolve(result);
+                if (this.continuePolling(result)) {
+                    setTimeout(() => execute(resolve, reject));
+                } else {
+                    resolve(result);
+                }
+            } catch(e) {
+                reject(e);
             }
         };
 

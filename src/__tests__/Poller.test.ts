@@ -19,7 +19,7 @@ describe('Poller', () => {
             callsCount++;
             return callsCount < 3;
         }
-        const fn = jest.fn(() => output);
+        const fn = jest.fn(async () => output);
         const poller = new Poller({ fn, continuePolling });
 
         const result = await poller.poll();
@@ -27,4 +27,12 @@ describe('Poller', () => {
         expect(result).toEqual(output);
         expect(fn).toHaveBeenCalledTimes(3);
     });
+
+    it('should stop and throw an error if the given function throws an error', async () => {
+        const error = new Error('Something went wrong :( ');
+        const fn = jest.fn(() => { throw error; });
+        const poller = new Poller({ fn })
+
+        await expect(() => poller.poll()).rejects.toEqual(error);
+    })
 })
