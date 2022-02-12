@@ -1,6 +1,6 @@
 {
   "name": "poller-bear",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A polling library for JavaScript and TypeScript",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
