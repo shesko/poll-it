@@ -14,9 +14,11 @@ With this basic configuration, the `Poller.poll()` can be called to infinitely e
 the provided function.
 
 ```typescript
+import Poller, from "poller-bear";
+
 const config = { fn: () => console.log('Polling...') }
 const poller = new Poller<void>(config);
-poller.poll().resolve();
+poller.poll().then();
 ```
 
 ### Stop polling on custom condition
@@ -25,11 +27,13 @@ poll until an api responds with a certain status. This can be achieved by provid
 to the `continuePolling` field of our Poller `config` object
 
 ```typescript
-const fn = (): ApiResponse => ApiService.get();
-const continuePolling = (apiResponse: ApiResponse) => apiResponse.status === 'SUCCESS';
+import Poller, {TIMEOUT_ERROR} from 'poller-bear';
+
+const fn = async () => ApiService.get();
+const continuePolling = (apiResponse) => apiResponse.status !== 'SUCCESS'
 
 const config = { fn, continuePolling }
-const poller = new Poller<ApiResponse>(config);
+const poller = new Poller(config);
 
 const response = await poller.poll();
 ```
@@ -37,8 +41,27 @@ const response = await poller.poll();
 Once `continuePolling` returns `true`, the poller will stop polling and will return 
 the result of your target function. 
 
+## Max retries
+Polling Bear also allows you to define a maximum number of retries. The code below defines a poller
+that will poll maximum 5 times by setting the `maxRetries` field to 5. 
+If the limit is reached, a timeout error is thrown. The error object can be imported
+in order to do a check when catching an error.
 
+```typescript
+import Poller, {TIMEOUT_ERROR} from 'poller-bear';
 
+try {
+    const fn = () => console.log('Polling...');
+    const poller = new Poller({ fn, maxRetries: 5 });
+    await poller.poll();
+} catch(e) {
+    if (e === TIMEOUT_ERROR) {
+        console.error('The poller has timed out')
+    } else {
+        console.error(e)
+    }
+}
+```
 
 
 

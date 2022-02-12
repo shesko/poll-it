@@ -1,3 +1,6 @@
-import Poller from "./Poller";
+import Poller, { TIMEOUT_ERROR } from "./Poller";
 
-export default Poller
+export {
+    Poller as default,
+    TIMEOUT_ERROR
+}
