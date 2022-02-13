@@ -14,11 +14,31 @@ With this basic configuration, the `Poller.poll()` can be called to infinitely e
 the provided function.
 
 ```typescript
-import Poller, from "poller-bear";
+import Poller from "poller-bear";
 
 const config = { fn: () => console.log('Polling...') }
 const poller = new Poller<void>(config);
-poller.poll().then();
+
+await poller.poll();
+```
+
+The implementation above is just a simple demonstration. We wouldn't advise to implement it this way since it would
+block the rest of your application.
+
+## Interval
+By default, the poller will poll continuously with no pause. Usually you want to wait a little between each poll.
+Poller bear allow you to define this via the interval configuration. The code below will poll every 3 seconds.
+
+```typescript
+import Poller from "poller-bear";
+
+const fn = () => console.log('Polling...')
+const interval = { ms: 3000 }
+
+const config = { fn, interval }
+const poller = new Poller<void>(config);
+
+await poller.poll();
 ```
 
 ### Stop polling on custom condition
@@ -27,7 +47,7 @@ poll until an api responds with a certain status. This can be achieved by provid
 to the `continuePolling` field of our Poller `config` object
 
 ```typescript
-import Poller, {TIMEOUT_ERROR} from 'poller-bear';
+import Poller from 'poller-bear';
 
 const fn = async () => ApiService.get();
 const continuePolling = (apiResponse) => apiResponse.status !== 'SUCCESS'

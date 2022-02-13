@@ -1,5 +1,6 @@
 import Poller, {MAX_RETRIES_ERROR, TIMEOUT_ERROR} from '../Poller'
 import { v4 as uuidv4 } from 'uuid';
+import continuouslyAdvanceTimers from "./helpers/mockTimerHelper";
 
 describe('Poller', () => {
     let output: string;
@@ -65,4 +66,24 @@ describe('Poller', () => {
 
         Date.now = originalDateNow;
     });
+
+    it('should poll at a certain interval if the interval config has been defined', async () => {
+        jest.useFakeTimers();
+        jest.spyOn(global as any, 'setTimeout');
+        const cancelAdvance = continuouslyAdvanceTimers();
+
+        const interval = 3000
+
+        let callsCount = 0
+        const continuePolling = () => {
+            callsCount++;
+            return callsCount < 2;
+        }
+        const poller = new Poller({ fn, continuePolling, interval: { ms: interval } });
+        await poller.poll();
+
+        expect(setTimeout).toHaveBeenCalledTimes(1)
+        expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), interval);
+        cancelAdvance()
+    })
 })

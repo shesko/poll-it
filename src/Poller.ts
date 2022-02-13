@@ -9,12 +9,14 @@ export default class Poller<T> {
     private readonly continuePolling: (result?: T) => boolean = () => true;
     private readonly maxRetries: number | null;
     private readonly timeout: TimeoutConfig | null;
+    private readonly interval: IntervalConfig;
 
     constructor(config: PollerConfig<T>) {
         this.fn = config.fn
         this.continuePolling = config.continuePolling || this.continuePolling;
         this.maxRetries = config.maxRetries || null;
         this.timeout = config.timeout || null;
+        this.interval = config.interval || { ms: 0 };
     }
 
     async poll(): Promise<T> {
@@ -40,7 +42,7 @@ export default class Poller<T> {
                 if (!this.continuePolling(result)) {
                     resolve(result);
                 } else {
-                    setTimeout(() => execute(resolve, reject));
+                    setTimeout(() => execute(resolve, reject), this.interval.ms);
                 }
             } catch(e) {
                 reject(e);
@@ -55,10 +57,15 @@ export interface PollerConfig<T> {
     fn: () => T,
     continuePolling?: (result?: T) => boolean,
     timeout?: TimeoutConfig,
-    maxRetries?: number
+    maxRetries?: number,
+    interval?: IntervalConfig
 }
 
 export interface TimeoutConfig {
     seconds: number
+}
+
+export interface IntervalConfig {
+    ms: number
 }
 
