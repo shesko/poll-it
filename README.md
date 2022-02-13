@@ -1,7 +1,5 @@
 # Poller Bear
 
-:warning: THIS LIBRARY STILL HAS LIMITED FEATURES AND IS NOT READY FOR PRODUCTION :warning:
-
 A simple poller that can be used in both JavaScript and TypeScript projects. 
 With "Poller Bear" you can continuously perform an operation indefinitely or until a condition is met.
 
