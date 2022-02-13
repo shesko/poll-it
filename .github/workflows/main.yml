@@ -1,0 +1,10 @@
+name: Poller Bear Workflow
+on: [push]
+jobs:
+  Verify:
+    runs-on: ubuntu-latest
+    steps:
+      - npm install
+      - npm run build
+      - npm run lint
+      - npn run test
