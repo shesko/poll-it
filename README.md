@@ -15,7 +15,7 @@ the provided function.
 import Poller from "poller-bear";
 
 const config = { fn: () => console.log('Polling...') }
-const poller = new Poller<void>(config);
+const poller = new Poller(config);
 
 await poller.poll();
 ```
@@ -34,7 +34,7 @@ const fn = () => console.log('Polling...')
 const interval = { ms: 3000 }
 
 const config = { fn, interval }
-const poller = new Poller<void>(config);
+const poller = new Poller(config);
 
 await poller.poll();
 ```
