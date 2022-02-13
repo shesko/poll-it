@@ -44,15 +44,36 @@ the result of your target function.
 ## Max retries
 Polling Bear also allows you to define a maximum number of retries. The code below defines a poller
 that will poll maximum 5 times by setting the `maxRetries` field to 5. 
-If the limit is reached, a timeout error is thrown. The error object can be imported
+If the limit is reached, a `MAX_RETRIES_ERROR` error is thrown. The error object can be imported
 in order to do a check when catching an error.
+
+```typescript
+import Poller, {MAX_RETRIES_ERROR} from 'poller-bear';
+
+try {
+    const fn = () => console.log('Polling...');
+    const poller = new Poller({ fn, maxRetries: 5 });
+    await poller.poll();
+} catch(e) {
+    if (e === MAX_RETRIES_ERROR) {
+        console.error('The poller has reached the max amount of retries')
+    } else {
+        console.error(e)
+    }
+}
+```
+
+## Timeout
+You can also define a maximum amount of time that poller bear should be polling for. This can be done via the timeout
+object. Once the defined time has elapsed, a `TIMEOUT_ERROR` error is thrown. Similarly to max retries, the TIMEOUT error can be
+imported.
 
 ```typescript
 import Poller, {TIMEOUT_ERROR} from 'poller-bear';
 
 try {
     const fn = () => console.log('Polling...');
-    const poller = new Poller({ fn, maxRetries: 5 });
+    const poller = new Poller({ fn, timeout: { seconds: 25 } });
     await poller.poll();
 } catch(e) {
     if (e === TIMEOUT_ERROR) {

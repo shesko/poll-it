@@ -1,4 +1,4 @@
-import Poller, {TIMEOUT_ERROR} from '../Poller'
+import Poller, {MAX_RETRIES_ERROR, TIMEOUT_ERROR} from '../Poller'
 import { v4 as uuidv4 } from 'uuid';
 
 describe('Poller', () => {
@@ -44,7 +44,25 @@ describe('Poller', () => {
         const maxRetries = 5
         const poller = new Poller({ fn, maxRetries });
 
-        await expect(() => poller.poll()).rejects.toEqual(TIMEOUT_ERROR);
+        await expect(() => poller.poll()).rejects.toEqual(MAX_RETRIES_ERROR);
         expect(fn).toHaveBeenCalledTimes(5);
     })
+
+    it('should stop polling and throw a timeout error if more time has elapsed than the defined amount', async () => {
+        const originalDateNow = Date.now;
+        Date.now = jest.fn(() => 1644763429276);
+
+        const elapseASecond = jest.fn(() => {
+            const currentMockTimestamp = Date.now();
+            Date.now = jest.fn(() => currentMockTimestamp + 1000);
+        })
+
+        const timeout = { seconds: 25 }
+        const poller = new Poller({ fn: elapseASecond, timeout });
+
+        await expect(() => poller.poll()).rejects.toEqual(TIMEOUT_ERROR);
+        expect(elapseASecond).toHaveBeenCalledTimes(26);
+
+        Date.now = originalDateNow;
+    });
 })
